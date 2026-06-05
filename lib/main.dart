@@ -155,7 +155,15 @@ class ButtonSection extends StatelessWidget {
           ButtonWithText(color: color, icon: Icons.call, label: 'CALL'),
           //Agregamos un nuevo botón de ruta y agremas un link para compartir la ubicación del lugar
 
-          ButtonWithText(color: color, icon: Icons.near_me, label: 'ROUTE', ),
+          ButtonWithText(
+  color: color,
+  icon: Icons.near_me,
+  label: 'ROUTE',
+
+  onPressed: (){
+    abrirMapa('París, Francia');
+  },
+),
           ButtonWithText(color: color, icon: Icons.share, label: 'SHARE'),
         ],
       ),
@@ -165,36 +173,45 @@ class ButtonSection extends StatelessWidget {
 }
 
 class ButtonWithText extends StatelessWidget {
+
   const ButtonWithText({
     super.key,
     required this.color,
     required this.icon,
     required this.label,
+    this.onPressed,
   });
 
   final Color color;
   final IconData icon;
   final String label;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(icon, color: color),
-        Padding(
-          padding: const EdgeInsets.only(top: 8),
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w400,
-              color: color,
+
+    return InkWell(
+
+      onTap: onPressed,
+
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+
+          Icon(icon, color: color),
+
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Text(
+              label,
+              style: TextStyle(
+                fontSize: 12,
+                color: color,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -273,12 +290,13 @@ void _toggleFavorite() {
 
 //Funcion para abrir la ubicación del lugar en una aplicación de mapas, como Google Maps
 
-class MapLauncher {
-  static void openMap(String location) {
-    // Aquí puedes implementar la lógica para abrir la ubicación en una aplicación de mapas
-    // Por ejemplo, puedes usar el paquete url_launcher para abrir Google Maps con la ubicación
-    // url_launcher.launch('https://www.google.com/maps/search/?api=1&query=$location');
-    // Recuerda agregar el paquete url_launcher a tu pubspec.yaml y configurar los permisos necesarios para Android e iOS
+Future<void> abrirMapa(String lugar) async {
 
+  final Uri url = Uri.parse(
+    'https://www.google.com/maps/search/?api=1&query=$lugar'
+  );
+
+  if (!await launchUrl(url)) {
+    throw Exception('No se pudo abrir el mapa');
   }
 }
