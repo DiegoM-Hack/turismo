@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
 
             ImageSection(image: 'images/torre.jpg'),
             TitleSection(name: 'Torre Eiffel', location: 'París, Francia'),
-            ButtonSection(),
+            ButtonSection(lugar: 'París, Francia'),
             TextSection(
               description:
               'La Torre Eiffel es uno de los monumentos más famosos del mundo y símbolo de Francia. Fue construida en 1889 y recibe millones de visitantes cada año.',
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
 
             ImageSection(image: 'images/china.jpg'),
             TitleSection(name: 'Gran Muralla China', location: 'China'),
-            ButtonSection(),
+            ButtonSection(lugar: 'China'),
             TextSection(
               description:
               'La Gran Muralla China es una enorme construcción histórica creada para proteger antiguos territorios chinos y se extiende por miles de kilómetros.',
@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
 
             ImageSection(image: 'images/Machu.jpg'),
             TitleSection(name: 'Machu Picchu', location: 'Cusco, Perú'),
-            ButtonSection(),
+            ButtonSection(lugar: 'Cusco, Perú'),
             TextSection(
               description:
               'Machu Picchu es una antigua ciudad inca ubicada entre montañas. Es considerada una de las maravillas del mundo moderno.',
@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
 
             ImageSection(image: 'images/estatua.jpg'),
             TitleSection(name: 'Estatua de la Libertad', location: 'Nueva York, EE.UU'),
-            ButtonSection(),
+            ButtonSection(lugar: 'Nueva York, EE.UU'),
             TextSection(
               description:
               'La Estatua de la Libertad es un símbolo mundial de libertad y uno de los principales atractivos turísticos de Estados Unidos.',
@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
 
             ImageSection(image: 'images/majal.jpg'),
             TitleSection(name: 'Taj Mahal', location: 'Agra, India'),
-            ButtonSection(),
+            ButtonSection(lugar: 'Agra, India'),
             TextSection(
               description:
               'El Taj Mahal es un impresionante mausoleo construido en mármol blanco y considerado una joya arquitectónica mundial.',
@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
 
             ImageSection(image: 'images/cristo.jpg'),
             TitleSection(name: 'Cristo Redentor', location: 'Río de Janeiro, Brasil'),
-            ButtonSection(),
+            ButtonSection(lugar: 'Río de Janeiro, Brasil'),
             TextSection(
               description:
               'El Cristo Redentor es una enorme estatua ubicada sobre el cerro Corcovado y es uno de los símbolos más importantes de Brasil.',
@@ -67,7 +67,7 @@ class MyApp extends StatelessWidget {
 
             ImageSection(image: 'images/piramide.jpg'),
             TitleSection(name: 'Pirámides de Giza', location: 'Egipto'),
-            ButtonSection(),
+            ButtonSection(lugar: 'Egipto'),
             TextSection(
               description:
               'Las Pirámides de Giza son una de las siete maravillas del mundo antiguo y representan uno de los mayores logros arquitectónicos egipcios.',
@@ -75,7 +75,7 @@ class MyApp extends StatelessWidget {
 
             ImageSection(image: 'images/roma.jpg'),
             TitleSection(name: 'Coliseo Romano', location: 'Roma, Italia'),
-            ButtonSection(),
+            ButtonSection(lugar: 'Roma, Italia'),
             TextSection(
               description:
               'El Coliseo Romano fue un anfiteatro utilizado para espectáculos y combates de gladiadores durante el Imperio Romano.',
@@ -83,7 +83,7 @@ class MyApp extends StatelessWidget {
 
             ImageSection(image: 'images/santorini.jpg'),
             TitleSection(name: 'Santorini', location: 'Grecia'),
-            ButtonSection(),
+            ButtonSection(lugar: 'Santorini, Grecia'),
             TextSection(
               description:
               'Santorini es una famosa isla griega conocida por sus casas blancas, cúpulas azules y vistas espectaculares al mar.',
@@ -91,7 +91,7 @@ class MyApp extends StatelessWidget {
 
             ImageSection(image: 'images/kioto.jpg'),
             TitleSection(name: 'Kioto', location: 'Japón'),
-            ButtonSection(),
+            ButtonSection(lugar: 'Kioto, Japón'),
             TextSection(
               description:
               'La Ópera de Sídney es uno de los edificios más reconocidos del mundo y un importante centro cultural de Australia.',
@@ -143,35 +143,60 @@ class TitleSection extends StatelessWidget {
 }
 
 class ButtonSection extends StatelessWidget {
-  const ButtonSection({super.key});
+
+  const ButtonSection({
+    super.key,
+    required this.lugar,
+  });
+
+  final String lugar;
+
+  Future<void> abrirMapa() async {
+
+    final Uri url = Uri.parse(
+      'https://www.google.com/maps/search/?api=1&query=$lugar'
+    );
+
+    await launchUrl(url);
+  }
 
   @override
   Widget build(BuildContext context) {
+
     final Color color = Theme.of(context).primaryColor;
+
     return SizedBox(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          ButtonWithText(color: color, icon: Icons.call, label: 'CALL'),
-          //Agregamos un nuevo botón de ruta y agremas un link para compartir la ubicación del lugar
 
           ButtonWithText(
-  color: color,
-  icon: Icons.near_me,
-  label: 'ROUTE',
+            color: color,
+            icon: Icons.call,
+            label: 'CALL',
+          ),
 
-  onPressed: (){
-    abrirMapa('París, Francia');
-  },
-),
-          ButtonWithText(color: color, icon: Icons.share, label: 'SHARE'),
+          ButtonWithText(
+            color: color,
+            icon: Icons.near_me,
+            label: 'ROUTE',
+
+            onPressed: (){
+              abrirMapa();
+            },
+          ),
+
+          ButtonWithText(
+            color: color,
+            icon: Icons.share,
+            label: 'SHARE',
+          ),
+
         ],
       ),
     );
   }
-
 }
-
 class ButtonWithText extends StatelessWidget {
 
   const ButtonWithText({
